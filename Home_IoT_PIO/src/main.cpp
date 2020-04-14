@@ -8,7 +8,7 @@
 //************************************************************
 #include <painlessMesh.h>
 
-#define   MESH_PREFIX     "HumamAndIvorsSickHomeAutoNetwork"
+#define   MESH_PREFIX     "AutoNetwork"
 #define   MESH_PASSWORD   "passypasspass"
 #define   MESH_PORT       5555
 
@@ -21,7 +21,7 @@ void sendMessage() ; // Prototype so PlatformIO doesn't complain
 Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
 
 void sendMessage() {
-  String msg = "Hello from node ";
+  String msg = "Hello from node Humam";
   msg += mesh.getNodeId();
   mesh.sendBroadcast( msg );
   taskSendMessage.setInterval( random( TASK_SECOND * 1, TASK_SECOND * 5 ));
