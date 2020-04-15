@@ -8,6 +8,8 @@
 //************************************************************
 #include <painlessMesh.h>
 
+#define   LED_PIN         2  // Builtin LED - Pin "TX2" or "GPIO5"
+
 #define   MESH_PREFIX     "AutoNetwork"
 #define   MESH_PASSWORD   "passypasspass"
 #define   MESH_PORT       5555
@@ -17,11 +19,14 @@ painlessMesh  mesh;
 
 // User stub
 void sendMessage() ; // Prototype so PlatformIO doesn't complain
+void toggleLight();
+
+int ledState = LOW;
 
 Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
 
 void sendMessage() {
-  String msg = "Hello from node Humam";
+  String msg = "Hello from node Ass-";
   msg += mesh.getNodeId();
   mesh.sendBroadcast( msg );
   taskSendMessage.setInterval( random( TASK_SECOND * 1, TASK_SECOND * 5 ));
@@ -30,6 +35,7 @@ void sendMessage() {
 // Needed for painless library
 void receivedCallback( uint32_t from, String &msg ) {
   Serial.printf("startHere: Received from %u msg=%s\n", from, msg.c_str());
+  toggleLight();
 }
 
 void newConnectionCallback(uint32_t nodeId) {
@@ -44,8 +50,16 @@ void nodeTimeAdjustedCallback(int32_t offset) {
     Serial.printf("Adjusted time %u. Offset = %d\n", mesh.getNodeTime(),offset);
 }
 
+void toggleLight() {
+    ledState == LOW ? ledState=HIGH:ledState=LOW;
+    digitalWrite(LED_PIN, ledState);
+}
+
 void setup() {
   Serial.begin(115200);
+
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, ledState);
 
 //mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
   mesh.setDebugMsgTypes( ERROR | STARTUP );  // set before init() so that you can see startup messages
