@@ -3,21 +3,36 @@
 // setup a node that logs to a central logging node
 // The logServer example shows how to configure the central logging nodes
 //************************************************************
+#include <Wire.h>
+#include <SPI.h>
+#include <Adafruit_LIS3DH.h>
+#include <Adafruit_Sensor.h>
 #include "painlessMesh.h"
 
 #define   MESH_PREFIX     "whateverYouLike"
 #define   MESH_PASSWORD   "passypasspass"
 #define   MESH_PORT       5555
 
+#define LIS3DH_CS SS
+#define ADC_INPUT_VOLTAGE 3.03  // Shouldn't this be 3.3?  Whatever..
+#define ADC_RESOLUTION 1024
+#define MCP9700_TEMP_OFFSET_VOLTS 0.5
+#define MCP9700_TEMP_INCREMENT_VOLTS 0.01
+
+Adafruit_LIS3DH lis = Adafruit_LIS3DH(LIS3DH_CS);
+
 Scheduler     userScheduler; // to control your personal task
 painlessMesh  mesh;
 
-// Prototype
+// Prototypes
 void receivedCallback( uint32_t from, String &msg );
+double convertToTemperature(double voltage);
 
 size_t logServerId = 0;
 
-// Send message containing photoresistor value to the logServer every 10 seconds 
+/**
+ *  Send message containing photoresistor value to the logServer every 10 seconds 
+ */
 Task myLoggingTask(10000, TASK_FOREVER, []() {
 #if ARDUINOJSON_VERSION_MAJOR==6
         DynamicJsonDocument jsonBuffer(1024);
@@ -26,8 +41,11 @@ Task myLoggingTask(10000, TASK_FOREVER, []() {
         DynamicJsonBuffer jsonBuffer;
         JsonObject& msg = jsonBuffer.createObject();
 #endif
-    msg["topic"] = "photoresistor";
-    msg["value"] = analogRead(A0);
+    double adcInput = analogRead(A0) * ADC_INPUT_VOLTAGE / ADC_RESOLUTION;
+    double tempValueC = convertToTemperature(adcInput);
+
+    msg["topic"] = "temp_sensor";
+    msg["value"] = tempValueC;
 
     String str;
 #if ARDUINOJSON_VERSION_MAJOR==6
@@ -49,6 +67,9 @@ Task myLoggingTask(10000, TASK_FOREVER, []() {
     Serial.printf("\n");
 });
 
+/**
+ * Setup code
+ */
 void setup() {
   Serial.begin(115200);
 
@@ -64,6 +85,9 @@ void setup() {
   myLoggingTask.enable();
 }
 
+/**
+ * Loop
+ */
 void loop() {
   // it will run the user scheduler as well
   mesh.update();
@@ -93,4 +117,13 @@ void receivedCallback( uint32_t from, String &msg ) {
       }
       Serial.printf("Handled from %u msg=%s\n", from, msg.c_str());
   }
+}
+
+/**
+ * Converts a voltage value from the ADC into a celsius temperature
+ * @param voltage the A0 pin voltage
+ * @return the temperature in degrees celsius
+ */
+double convertToTemperature(double voltage){
+  return (voltage - MCP9700_TEMP_OFFSET_VOLTS) / MCP9700_TEMP_INCREMENT_VOLTS;
 }
