@@ -3,23 +3,18 @@
 // setup a node that logs to a central logging node
 // The logServer example shows how to configure the central logging nodes
 //************************************************************
-#include <Wire.h>
-#include <SPI.h>
-#include <Adafruit_LIS3DH.h>
-#include <Adafruit_Sensor.h>
 #include "painlessMesh.h"
 
 #define   MESH_PREFIX     "whateverYouLike"
-#define   MESH_PASSWORD   "passypasspass"
+#define   MESH_PASSWORD   "somethingSneaky"
 #define   MESH_PORT       5555
 
+// Sensor defines
 #define LIS3DH_CS SS
-#define ADC_INPUT_VOLTAGE 3.03  // Shouldn't this be 3.3?  Whatever..
+#define ADC_INPUT_VOLTAGE_MAX 3.03  // Shouldn't this be 3.3?  Whatever..
 #define ADC_RESOLUTION 1024
 #define MCP9700_TEMP_OFFSET_VOLTS 0.5
 #define MCP9700_TEMP_INCREMENT_VOLTS 0.01
-
-Adafruit_LIS3DH lis = Adafruit_LIS3DH(LIS3DH_CS);
 
 Scheduler     userScheduler; // to control your personal task
 painlessMesh  mesh;
@@ -30,9 +25,7 @@ double convertToTemperature(double voltage);
 
 size_t logServerId = 0;
 
-/**
- *  Send message containing photoresistor value to the logServer every 10 seconds 
- */
+// Send message to the logServer every 10 seconds 
 Task myLoggingTask(10000, TASK_FOREVER, []() {
 #if ARDUINOJSON_VERSION_MAJOR==6
         DynamicJsonDocument jsonBuffer(1024);
@@ -41,10 +34,11 @@ Task myLoggingTask(10000, TASK_FOREVER, []() {
         DynamicJsonBuffer jsonBuffer;
         JsonObject& msg = jsonBuffer.createObject();
 #endif
-    double adcInput = analogRead(A0) * ADC_INPUT_VOLTAGE / ADC_RESOLUTION;
+
+    double adcInput = analogRead(A0) * ADC_INPUT_VOLTAGE_MAX / ADC_RESOLUTION;
     double tempValueC = convertToTemperature(adcInput);
 
-    msg["topic"] = "temp_sensor";
+    msg["topic"] = "tempSensor";
     msg["value"] = tempValueC;
 
     String str;
@@ -67,13 +61,9 @@ Task myLoggingTask(10000, TASK_FOREVER, []() {
     Serial.printf("\n");
 });
 
-/**
- * Setup code
- */
+// Setup
 void setup() {
   Serial.begin(115200);
-
-  pinMode(A0, INPUT);
     
   mesh.setDebugMsgTypes( ERROR | STARTUP | CONNECTION );  // set before init() so that you can see startup messages
 
@@ -85,9 +75,7 @@ void setup() {
   myLoggingTask.enable();
 }
 
-/**
- * Loop
- */
+// Loop
 void loop() {
   // it will run the user scheduler as well
   mesh.update();
