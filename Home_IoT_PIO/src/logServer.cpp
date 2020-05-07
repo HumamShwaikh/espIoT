@@ -10,6 +10,8 @@
 #define   MESH_PASSWORD   "somethingSneaky"
 #define   MESH_PORT       5555
 
+#define QUIET_MODE_ENABLED 1  // Switch for quiet mode
+
 Scheduler     userScheduler; // to control your personal task
 painlessMesh  mesh;
 // Prototype
@@ -37,12 +39,16 @@ Task logServerTask(10000, TASK_FOREVER, []() {
     mesh.sendBroadcast(str);
 
     // log to serial
-#if ARDUINOJSON_VERSION_MAJOR==6
-    serializeJson(msg, Serial);
-#else
-    msg.printTo(Serial);
+#if QUIET_MODE_ENABLED!=1
+
+  #if ARDUINOJSON_VERSION_MAJOR==6
+      serializeJson(msg, Serial);
+  #else
+      msg.printTo(Serial);
+  #endif
+      Serial.printf("\n");
+      
 #endif
-    Serial.printf("\n");
 });
 
 void setup() {
@@ -56,11 +62,15 @@ void setup() {
   mesh.onReceive(&receivedCallback);
 
   mesh.onNewConnection([](size_t nodeId) {
-    Serial.printf("New Connection %u\n", nodeId);
+    #if QUIET_MODE_ENABLED!=1
+      Serial.printf("New Connection %u\n", nodeId);
+    #endif
   });
 
   mesh.onDroppedConnection([](size_t nodeId) {
+    #if QUIET_MODE_ENABLED!=1
     Serial.printf("Dropped Connection %u\n", nodeId);
+    #endif
   });
 
   // Add the task to the your scheduler
@@ -74,5 +84,5 @@ void loop() {
 }
 
 void receivedCallback( uint32_t from, String &msg ) {
-  Serial.printf("logServer: Received from %u msg=%s\n", from, msg.c_str());
+  Serial.printf("<logServer: Received from %u msg=%s>\n", from, msg.c_str());
 }
