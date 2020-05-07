@@ -1,9 +1,7 @@
 #include <iostream>
-#include "rs232.h"
+#include "serialMonitor.hpp"
 
 using namespace std;
-
-#define BUFLEN 512
 
 int main(){
 
@@ -27,7 +25,7 @@ int main(){
         if(input > 0) {
             str_recv[input] = 0;   /* always put a "null" at the end of a string! */
             printf("Received %i bytes: '%s'\n", input, (char *)str_recv);
-            usleep(2500000);  /* sleep for 5 Second */
+            usleep(10000000);  /* sleep for 5 Second */
 
         }
 
