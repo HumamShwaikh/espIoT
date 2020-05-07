@@ -28,13 +28,13 @@ int main(){
         if(input > 0) {
             str_recv2[input] = 0;   /* always put a "null" at the end of a string! */
 
-            if( strchr((char*)str_recv1, '<') != NULL && strchr((char*)str_recv1, '>') ) {
+            if( strchr((char*)str_recv1, '<') != NULL && strchr((char*)str_recv1, '>') && strlen(strchr((char*)str_recv1, '<')) > strlen(strchr((char*)str_recv1, '>')) ) {
                 // Print out content of str_recv1 between chars '<' and '>'
-                printf("Received %i bytes: '%s'\n", input, (char *)str_recv1);
+                printf("Yeceived %i bytes: '%s'\n", input, (char *)str_recv1);
             }
             else if( strchr((char*)str_recv1, '<') != NULL && strchr((char*)str_recv2, '>') ) {
                 // Print out content of str_recv1 after char '<' and content of str_recv2 before char '>'
-                printf("Received %i bytes: '%s'\n and also %s\n", input, (char *)str_recv1, (char *)str_recv2);
+                printf("Zeceived %i bytes: '%s'\n and also %s\n", input, (char *)str_recv1, (char *)str_recv2);
             }
 
             //printf("Received %i bytes: '%s'\n", input, (char *)str_recv1);
