@@ -17,6 +17,8 @@ int main() {
 
         cout << data << endl << endl;
 
+        cout << "//////////////////////////////" << endl;
+
         usleep(DELAY/2);
 
     }

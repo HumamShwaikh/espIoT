@@ -54,7 +54,7 @@ using namespace std;
 
             }
             else {
-                receivedData = "_____________________________";
+                receivedData = "\t---Nothing available.---";
             }
 
             return(receivedData);
