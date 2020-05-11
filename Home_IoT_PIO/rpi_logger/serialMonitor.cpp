@@ -38,17 +38,17 @@ using namespace std;
 
                 if( str1pos[0] != string::npos && str1pos[1] != string::npos && str1pos[0] < str1pos[1] ) {
                     // Print content of str_recv1 if str_recv1 contains '<' and '>' in that order
-                    cout << "Yeceived " << input << " bytes: " << str1 << endl;
-                    receivedData = str1.substr(str1pos[0], str1pos[2] - str1pos[1] - str1pos[0]);
+                    //cout << "Yeceived " << input << " bytes: " << str1 << endl << endl;
+                    receivedData = str1.substr(str1pos[0]);
                 }
                 else if( str1pos[0] != string::npos && str2pos[0] != string::npos && str2pos[1] != string::npos ) {
                     // Print out content of str_recv1 after char '<' and content of str_recv2 before char '>'
-                    cout << "Xeceived " << input << " bytes: " << str2 << " and also " << str1 << endl;
+                    //cout << "Xeceived " << input << " bytes: " << str2 << " and also " << str1 << endl << endl;
                     receivedData = str1.substr(str1pos[0]) + str2.substr(0, str2pos[1] + 1);
                 }
                 else if( str1pos[0] != string::npos && str1pos[1] != string::npos && str2pos[1] != string::npos ) {
                     // Print out content of str_recv1 after char '<' and content of str_recv2 before char '>'
-                    cout << "Zeceived " << input << " bytes: " << str2 << " and also " << str1 << endl;
+                    //cout << "Zeceived " << input << " bytes: " << str2 << " and also " << str1 << endl << endl;
                     receivedData = str1.substr(str1pos[0]) + str2.substr(0, str2pos[1] + 1);
                 }
 

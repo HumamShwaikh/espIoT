@@ -2,8 +2,8 @@
 #include <string>
 #include "rs232.h"
 
-#ifndef SERIALMONITOR_H
-#define SERIALMONITOR_H
+#ifndef SERIALMONITOR_HPP
+#define SERIALMONITOR_HPP
 
 #define BUFLEN 79
 #define COMPORT 16 // /dev/ttyUSB0
@@ -23,4 +23,4 @@ class SerialMonitor {
 
 };
 
-#endif // SERIALMONITOR_H
+#endif // SERIALMONITOR_HPP
