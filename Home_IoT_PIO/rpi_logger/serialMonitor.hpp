@@ -8,7 +8,7 @@
 #define BUFLEN 79
 #define COMPORT 16 // /dev/ttyUSB0
 #define BAUD 115200
-#define DELAY 10000000 // delay time; 10000000 us or 10 seconds.
+#define DELAY 5000000 // delay time; 5000000 us or 5 seconds.
 
 
 class SerialMonitor {

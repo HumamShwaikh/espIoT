@@ -6,6 +6,8 @@
 #include "sample.hpp"
 #include "json.hpp"
 
+#define LINE_BREAK "//////////////////////////////"
+
 using json = nlohmann::json;
 
 using namespace std;
@@ -29,15 +31,13 @@ int main() {
 
             json jsonData = data;
 
-            Sample sample("topic", 69.696, "unit");
+            Sample sample(jsonData["topic"], 69.696, "unit");
 
-            cout << sample << endl;
-
-            cout << "//////////////////////////////" << endl;
+            cout << sample << endl << LINE_BREAK << endl;
 
         }
 
-        usleep(DELAY/2);
+        usleep(DELAY);
 
     }
 
