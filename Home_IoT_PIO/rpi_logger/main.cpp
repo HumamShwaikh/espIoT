@@ -2,6 +2,7 @@
 #include <string>
 #include <algorithm>
 #include "serialMonitor.hpp"
+#include "sample.cpp"
 #include "sample.hpp"
 #include "json.hpp"
 
@@ -22,16 +23,19 @@ int main() {
 
         string data = sm.getData();
 
-        //if(std::count(data.begin(), data.end(), '<' == 1) && std::count(data.begin(), data.end(), '>')) {
-        
-        data = getSubstringBetweenDelimiters(data, '{', '}');
+        if(data != ""){
 
-        json jsonData = data;
+            data = getSubstringBetweenDelimiters(data, '{', '}');
 
-        cout << jsonData.dump(4) << endl;
+            json jsonData = data;
 
+            Sample sample("topic", 69.696, "unit");
 
-        cout << "//////////////////////////////" << endl;
+            cout << sample << endl;
+
+            cout << "//////////////////////////////" << endl;
+
+        }
 
         usleep(DELAY/2);
 
