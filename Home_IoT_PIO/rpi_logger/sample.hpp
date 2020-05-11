@@ -21,11 +21,5 @@ public:
     friend std::ostream& operator<< (std::ostream &out, const Sample &sample);
 };
 
-std::ostream& operator<< (std::ostream &out, const Sample &sample)
-{
-    out << "Point(" << sample.dateTime << ", " << sample.topic << ", " << sample.value << ")"; // actual output done here
- 
-    return out; // return std::ostream so we can chain calls to operator<<
-}
 
 #endif // SAMPLE_HPP

@@ -2,7 +2,7 @@
 #include <string>
 #include <algorithm>
 #include "serialMonitor.hpp"
-#include "sample.cpp"
+#include "sample.cpp"  // Don't know why we need this...?  But the linker complains if we remove it.
 #include "sample.hpp"
 #include "json.hpp"
 

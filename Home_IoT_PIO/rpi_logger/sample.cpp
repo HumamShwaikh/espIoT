@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Sample::Sample(string _topic, float _value, string _unit){//} : topic(_topic), value(_value), unit(_unit) {
+Sample::Sample(string _topic, float _value, string _unit) {
 
     Sample::dateTime = getTimeUTC();  // Timestamp with current date & time
     Sample::topic = _topic;
@@ -10,7 +10,7 @@ Sample::Sample(string _topic, float _value, string _unit){//} : topic(_topic), v
     Sample::unit = _unit;
 }
 
-string Sample::getTimeUTC(){
+string Sample::getTimeUTC() {
 
     time_t currentTime = time(NULL);
     string stringTime = ctime(&currentTime);
@@ -18,4 +18,13 @@ string Sample::getTimeUTC(){
     return(stringTime);
 
 }
+
+std::ostream& operator<< (std::ostream &out, const Sample &sample) {
+
+    out << "Sample(" << sample.dateTime << " | " << sample.topic << " | " << sample.value << sample.unit << ")";
+ 
+    return out; // return std::ostream so we can chain calls to operator<<
+
+}
+
 
