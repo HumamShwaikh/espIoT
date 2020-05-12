@@ -8,7 +8,8 @@
 #include "serialMonitor.hpp"
 #include "json.hpp"
 
-#define LINE_BREAK "////////////////////////////////////////"
+#define DATABASE_FILENAME   "meshlog.db"
+#define LINE_BREAK          "////////////////////////////////////////"
 
 using json = nlohmann::json;
 using namespace std;
@@ -18,11 +19,12 @@ string getSubstringBetweenDelimiters(string inputString, char startDelimiter, ch
 string getTimeUTC();
 string getDateTime();
 json getJsonFromString(string input);
-void initDB();
+void doSQLInsert(json data);
 void signalHandler(int sig);
 
 //Global variables
 volatile sig_atomic_t signalFlag = 0;
+sqlite3* DB;
 
 int main() {
 
@@ -35,10 +37,12 @@ int main() {
         return(-1);
     }
 
-    // if(initDB() == 0) {
-    //     cout << "Failed to open DB!" << endl;
-    //     return(-1);
-    // }
+    int exit = sqlite3_open(DATABASE_FILENAME, &DB); 
+
+    if(exit != SQLITE_OK) {
+        cout << "Failed to open DB!" << endl;
+        return(-1);
+    }
 
     // Loop forever and ever.  (until SIGINT)
     while(true) {
@@ -46,7 +50,7 @@ int main() {
         // Did we get a SIGINT?
         if(signalFlag) {
             cout << "--- SIGINT CAUGHT ---" << endl << "Closing DB and ending program..." << endl;
-            //Close Database Here
+            sqlite3_close(DB);
             return(0);
         }
 
@@ -61,6 +65,8 @@ int main() {
             cout << std::setw(4) << jsonData << endl;
 
             cout << LINE_BREAK << endl;
+
+            doSQLInsert(jsonData); // Where the magic happens
 
         }
 
@@ -131,9 +137,14 @@ json getJsonFromString(string input) {
 
 }
 
-void initDB() {
+void doSQLInsert(json data) {
 
-    sqlite3* DB;
+    int exit = 0;
+    string query = "INSERT INTO Samples (DateTime, NodeID, Topic, Value, Unit) VALUES (" + to_string(data["DateTime"]) + ", " + to_string(data["nodeId"]) + ", " + to_string(data["topic"]) + ", " + to_string(data["value"]) + ", " + to_string(data["unit"]) + ");";
+    char* errorMessage;
+    exit = sqlite3_exec(DB, query.c_str(), NULL, 0, &errorMessage);
+
+    cout << "*-*-*-*-*-*" << endl;
 
 }
 

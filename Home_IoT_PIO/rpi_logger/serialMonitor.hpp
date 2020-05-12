@@ -5,10 +5,10 @@
 #include <string>
 #include "rs232.h"
 
-#define BUFLEN 111 // roughly matches the length of an incoming message
-#define COMPORT 16 // /dev/ttyUSB0
-#define BAUD 115200
-#define DELAY 10000000 // delay time; 10000000 us or 10 seconds.
+#define BUFLEN      111 // roughly matches the length of an incoming message
+#define COMPORT     16 // /dev/ttyUSB0
+#define BAUD        115200
+#define DELAY       10000000 // delay time; 10000000 us or 10 seconds.
 
 
 class SerialMonitor {

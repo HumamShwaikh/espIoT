@@ -21,3 +21,18 @@ uploaded.  For example,
 `src_filter = +<logClient.cpp> 
 -<logServer.cpp>` will exclude 
 logServer.cpp.
+
+#### Raspberry Pi logger
+
+The Raspberry Pi logger, in rpi_logger directory, runs continuously and stores messages received by the Pi (through the master node via serial connection) in a SQLite3 DB.  To run:
+
+* Make sure master node is connected to Pi via USb using port `/dev/ttyUSB0`
+* Make sure `meshlog.db` is created and initialize the schema with `schema.sql`
+
+Build using the following command:
+
+`g++ -Wall main.cpp serialMonitor.cpp rs232.c -o a.out -std=c++11 -lsqlite3`
+
+Run:
+
+`./a.out`
