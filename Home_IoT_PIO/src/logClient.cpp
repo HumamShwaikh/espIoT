@@ -38,8 +38,10 @@ Task myLoggingTask(10000, TASK_FOREVER, []() {
     double adcInput = analogRead(A0) * ADC_INPUT_VOLTAGE_MAX / ADC_RESOLUTION;
     double tempValueC = convertToTemperature(adcInput);
 
+    msg["nodeId"] = mesh.getNodeId();
     msg["topic"] = "tempSensor";
     msg["value"] = tempValueC;
+    msg["unit"] = "\u00b0C";
 
     String str;
 #if ARDUINOJSON_VERSION_MAJOR==6

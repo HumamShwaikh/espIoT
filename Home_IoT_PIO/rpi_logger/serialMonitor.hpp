@@ -5,10 +5,10 @@
 #include <string>
 #include "rs232.h"
 
-#define BUFLEN 79
+#define BUFLEN 111
 #define COMPORT 16 // /dev/ttyUSB0
 #define BAUD 115200
-#define DELAY 5000000 // delay time; 5000000 us or 5 seconds.
+#define DELAY 10000000 // delay time; 10000000 us or 10 seconds.
 
 
 class SerialMonitor {

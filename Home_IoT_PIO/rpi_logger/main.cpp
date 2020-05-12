@@ -4,11 +4,9 @@
 #include <sstream>
 #include <algorithm>
 #include "serialMonitor.hpp"
-#include "sample.cpp"  // Don't know why we need this...?  But the linker complains if we remove it.
-#include "sample.hpp"
 #include "json.hpp"
 
-#define LINE_BREAK "//////////////////////////////"
+#define LINE_BREAK "/////////////////////////////////////"
 
 using json = nlohmann::json;
 
@@ -16,13 +14,16 @@ using namespace std;
 
 //Prototype
 string getSubstringBetweenDelimiters(string inputString, char startDelimiter, char endDelimiter);
-std::string escape_json(const std::string &s);
+string getTimeUTC();
+json getJsonFromString(string input);
 
 int main() {
 
     SerialMonitor sm;
 
-    sm.init();
+    if(sm.init() == 0) {
+        return(-1);
+    }
 
     while(true) {
 
@@ -32,23 +33,15 @@ int main() {
 
             data = getSubstringBetweenDelimiters(data, '{', '}');
 
-            cout << data << "Heuh" << endl;
+            json jsonData = getJsonFromString(data);
 
-            json jsonData = json::parse(data);
-
-            cout << std::setw(8) << jsonData << endl;
-
-            cout << jsonData["topic"] << endl;
-
-            //Sample sample(jsonData["topic"], 69.696, "unit");
-
-            //cout << sample << endl << LINE_BREAK << endl;
+            cout << std::setw(4) << jsonData << endl;
 
             cout << LINE_BREAK << endl;
 
         }
 
-        usleep(DELAY*2);
+        usleep(DELAY);
 
     }
 
@@ -83,25 +76,23 @@ string getSubstringBetweenDelimiters(string inputString, char startDelimiter, ch
 
 }
 
-std::string escape_json(const std::string &s) {
-    std::ostringstream o;
-    for (auto c = s.cbegin(); c != s.cend(); c++) {
-        switch (*c) {
-        case '"': o << "\\\""; break;
-        case '\\': o << "\\\\"; break;
-        case '\b': o << "\\b"; break;
-        case '\f': o << "\\f"; break;
-        case '\n': o << "\\n"; break;
-        case '\r': o << "\\r"; break;
-        case '\t': o << "\\t"; break;
-        default:
-            if ('\x00' <= *c && *c <= '\x1f') {
-                o << "\\u"
-                  << std::hex << std::setw(4) << std::setfill('0') << (int)*c;
-            } else {
-                o << *c;
-            }
-        }
-    }
-    return o.str();
+/**
+ * @return the current UTC time as a string.
+ **/
+string getTimeUTC() {
+
+    time_t currentTime = time(NULL);
+    string stringTime = ctime(&currentTime);
+
+    return(stringTime.substr(0, stringTime.length() - 1));
+
+}
+
+json getJsonFromString(string input) {
+
+    json jsonData = json::parse(input);
+    jsonData["DateTime"] = getTimeUTC();
+
+    return(jsonData);
+
 }
