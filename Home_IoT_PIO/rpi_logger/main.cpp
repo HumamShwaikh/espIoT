@@ -6,7 +6,7 @@
 #include "serialMonitor.hpp"
 #include "json.hpp"
 
-#define LINE_BREAK "/////////////////////////////////////"
+#define LINE_BREAK "////////////////////////////////////////"
 
 using json = nlohmann::json;
 
@@ -15,6 +15,7 @@ using namespace std;
 //Prototype
 string getSubstringBetweenDelimiters(string inputString, char startDelimiter, char endDelimiter);
 string getTimeUTC();
+string getDateTime();
 json getJsonFromString(string input);
 
 int main() {
@@ -84,14 +85,31 @@ string getTimeUTC() {
     time_t currentTime = time(NULL);
     string stringTime = ctime(&currentTime);
 
+
+
     return(stringTime.substr(0, stringTime.length() - 1));
+
+}
+
+/**
+ * @return the current ISO 8601 date and time as a string.
+ **/
+string getDateTime() {
+
+    time_t now;
+    time(&now);
+    char buf[30];
+    strftime(buf, sizeof buf, "%Y-%m-%d %H:%M:%S", localtime(&now));
+    std::string timestr(buf);
+
+    return (timestr);
 
 }
 
 json getJsonFromString(string input) {
 
     json jsonData = json::parse(input);
-    jsonData["DateTime"] = getTimeUTC();
+    jsonData["DateTime"] = getDateTime();
 
     return(jsonData);
 
