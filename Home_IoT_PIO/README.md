@@ -4,7 +4,7 @@ Mesh network using ESP8266, ESP32,
 PainlessMesh, and some sensors to 
 sense and log environmental data.
 
-### How to use
+## How to use - ESP32/ESP8266 code
 
 * **logServer.cpp** - run by the 
 central server.
@@ -22,12 +22,15 @@ uploaded.  For example,
 -<logServer.cpp>` will exclude 
 logServer.cpp.
 
-#### Raspberry Pi logger
+## How to use - Raspberry Pi logger
 
 The Raspberry Pi logger, in rpi_logger directory, runs continuously and stores messages received by the Pi (through the master node via serial connection) in a SQLite3 DB.  To run:
 
 * Make sure master node is connected to Pi via USb using port `/dev/ttyUSB0`
 * Make sure `meshlog.db` is created and initialize the schema with `schema.sql`
+* Make sure you have all the dependencies:
+    * sqlite3
+    * libsqlite3-dev
 
 Build using the following command:
 
