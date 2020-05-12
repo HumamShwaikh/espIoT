@@ -3,30 +3,52 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include <sqlite3.h>
+#include <signal.h>
 #include "serialMonitor.hpp"
 #include "json.hpp"
 
 #define LINE_BREAK "////////////////////////////////////////"
 
 using json = nlohmann::json;
-
 using namespace std;
 
-//Prototype
+//Prototypes
 string getSubstringBetweenDelimiters(string inputString, char startDelimiter, char endDelimiter);
 string getTimeUTC();
 string getDateTime();
 json getJsonFromString(string input);
+void initDB();
+void signalHandler(int sig);
+
+//Global variables
+volatile sig_atomic_t signalFlag = 0;
 
 int main() {
+
+    signal(SIGINT, signalHandler); // Tell program to call signalHandler() when SIGINT received
 
     SerialMonitor sm;
 
     if(sm.init() == 0) {
+        cout << "Failed to open Serial Monitor!" << endl;
         return(-1);
     }
 
+    // if(initDB() == 0) {
+    //     cout << "Failed to open DB!" << endl;
+    //     return(-1);
+    // }
+
+    // Loop forever and ever.  (until SIGINT)
     while(true) {
+
+        // Did we get a SIGINT?
+        if(signalFlag) {
+            cout << "--- SIGINT CAUGHT ---" << endl << "Closing DB and ending program..." << endl;
+            //Close Database Here
+            return(0);
+        }
 
         std::string data = sm.getData();
 
@@ -45,12 +67,6 @@ int main() {
         usleep(DELAY);
 
     }
-
-
-
-
-
-
 
 
 
@@ -112,5 +128,17 @@ json getJsonFromString(string input) {
     jsonData["DateTime"] = getDateTime();
 
     return(jsonData);
+
+}
+
+void initDB() {
+
+    sqlite3* DB;
+
+}
+
+void signalHandler(int sig) {
+
+    signalFlag = 1;
 
 }
