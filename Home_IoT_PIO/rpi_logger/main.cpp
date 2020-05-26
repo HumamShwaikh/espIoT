@@ -56,19 +56,31 @@ int main() {
 
         std::string data = sm.getData();
 
-        if(data != ""){
+        try {
 
-            data = getSubstringBetweenDelimiters(data, '{', '}');
+            if(data != ""){
 
-            json jsonData = getJsonFromString(data);
+                data = getSubstringBetweenDelimiters(data, '{', '}');
 
-            cout << std::setw(4) << jsonData << endl;
+                json jsonData = getJsonFromString(data);
 
-            cout << LINE_BREAK << endl;
+                cout << std::setw(4) << jsonData << endl;
 
-            doSQLInsert(jsonData); // Where the magic happens
+                cout << LINE_BREAK << endl;
 
-        }
+                doSQLInsert(jsonData); // Where the magic happens
+
+            }
+
+        } catch (nlohmann::detail::parse_error parseError) {
+
+                cout << "Caught a parse exception: " << parseError.what() << endl;
+
+            } catch(std::exception error) {
+
+                cout << "Caught an exception: " << error.what() << endl;
+
+            }
 
         usleep(DELAY);
 
