@@ -39,3 +39,8 @@ Build using the following command:
 Run:
 
 `./a.out`
+
+### Attribution
+
+* [Teuniz C RS-232 library](https://gitlab.com/Teuniz/RS-232)
+* [nlohmann's C++ JSON library](https://github.com/nlohmann/json)
