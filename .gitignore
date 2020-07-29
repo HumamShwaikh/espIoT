@@ -7,3 +7,5 @@ rpi_logger/a.out
 test/
 lib/
 include/
+*.code-workspace
+*.ini
