@@ -1,8 +1,11 @@
 # Data from Home
 
-Mesh network using ESP8266, ESP32, 
-PainlessMesh, and some sensors to 
-sense and log environmental data.
+Mesh network of IoT devices to sense and report environmental data.  Made using ESP8266, ESP32, PainlessMesh, and various sensors to measure temperature, humidity, ambient noise, vibration, and whatever else you want.
+
+## Authors
+
+* Ivor Benderavage - [@ivorysoap](github.com/ivorysoap)
+* Humam Shwaikh - [@HumamShwaikh](github.com/HumamShwaikh)
 
 ## How to use - ESP32/ESP8266 code
 
@@ -11,8 +14,7 @@ central server.
 * **logClient.cpp** - run by the 
 nodes in the mesh.
 
-**How to upload ONE of the .cpp 
-files to a board in PlatformIO?**
+### How to upload ONE of the .cpp files to a board in PlatformIO?**
 
 In platformio.ini, you have to 
 use `src_filter` to exclude and 
@@ -22,7 +24,7 @@ uploaded.  For example,
 -<logServer.cpp>` will exclude 
 logServer.cpp.
 
-## How to use - Raspberry Pi logger
+### How to use - Raspberry Pi logger
 
 The Raspberry Pi logger, in rpi_logger directory, runs continuously and stores messages received by the Pi (through the master node via serial connection) in a SQLite3 DB.  To run:
 
