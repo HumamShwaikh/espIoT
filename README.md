@@ -7,23 +7,6 @@ Mesh network of IoT devices to sense and report environmental data.  Made using 
 * Ivor Benderavage - [@ivorysoap](github.com/ivorysoap)
 * Humam Shwaikh - [@HumamShwaikh](github.com/HumamShwaikh)
 
-## How to use - ESP32/ESP8266 code
-
-* **logServer.cpp** - run by the 
-central server.
-* **logClient.cpp** - run by the 
-nodes in the mesh.
-
-### How to upload ONE of the .cpp files to a board in PlatformIO?**
-
-In platformio.ini, you have to 
-use `src_filter` to exclude and 
-include the files to be built and 
-uploaded.  For example, 
-`src_filter = +<logClient.cpp> 
--<logServer.cpp>` will exclude 
-logServer.cpp.
-
 ### How to use - Raspberry Pi logger
 
 The Raspberry Pi logger, in rpi_logger directory, runs continuously and stores messages received by the Pi (through the master node via serial connection) in a SQLite3 DB.  To run:
@@ -42,7 +25,29 @@ Run:
 
 `./a.out`
 
-### Attribution
+## How to flash code to one of the ESP nodes
 
+All the nodes run one of the following .cpp files:
+
+* `logServer.cpp` - run by the 
+central server.
+* `logClient.cpp` - run by the 
+nodes in the mesh.
+
+### How to upload ONE of the .cpp files to a board in PlatformIO?
+
+In `platformio.ini`, you have to 
+use the `src_filter` option to exclude and 
+include the files to be built and 
+uploaded.  For example, 
+`src_filter = +<logClient.cpp> 
+-<logServer.cpp>` will exclude 
+logServer.cpp.
+
+
+
+## Attribution
+
+* [Painless Mesh](https://github.com/gmag11/painlessMesh)
 * [Teuniz C RS-232 library](https://gitlab.com/Teuniz/RS-232)
 * [nlohmann's C++ JSON library](https://github.com/nlohmann/json)
