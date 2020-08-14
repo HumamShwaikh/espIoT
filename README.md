@@ -2,6 +2,9 @@
 
 Mesh network of IoT devices to sense and report environmental data.  Made using ESP8266, ESP32, PainlessMesh, and various sensors to measure temperature, humidity, ambient noise, vibration, and whatever else you want.
 
+* **Edge node** - ESP32/ESP8266 coupled with a Raspberry Pi
+* **Other nodes** - ESP32/ESP8266 standalone.
+
 ## Authors
 
 * Ivor Benderavage - [@ivorysoap](github.com/ivorysoap)
