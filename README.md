@@ -1,6 +1,8 @@
 # Data from Home
 
-Mesh network of IoT devices to sense and report environmental data.  Made using ESP8266, ESP32, PainlessMesh, and various sensors to measure temperature, humidity, ambient noise, vibration, and whatever else you want.
+This is the codebase for a mesh network of IoT devices used to sense and report environmental data, made with ESP8266 and ESP32 microcontrollers, the PainlessMesh library, and various sensors to measure temperature, humidity, ambient noise, vibration, and whatever other data you want.
+
+The nodes in the network are made up of these devices:
 
 * **Edge node** - ESP32/ESP8266 coupled with a Raspberry Pi
 * **Other nodes** - ESP32/ESP8266 standalone.
@@ -12,19 +14,19 @@ Mesh network of IoT devices to sense and report environmental data.  Made using 
 
 ### How to use - Raspberry Pi logger
 
-The Raspberry Pi logger, in rpi_logger directory, runs continuously and stores messages received by the Pi (through the master node via serial connection) in a SQLite3 DB.  To run:
+The Raspberry Pi logger, (`rpi_logger` directory) runs continuously and stores messages received by the Pi (through the master node via serial connection) in a SQLite3 DB.  To run it:
 
-* Make sure master node is connected to Pi via USb using port `/dev/ttyUSB0`
-* Make sure `meshlog.db` is created and initialize the schema with `schema.sql`
+* Make sure the master node is connected to Pi via USB using port `/dev/ttyUSB0`
+* Make sure `meshlog.db` is created, and initialize the schema with `schema.sql`
 * Make sure you have all the dependencies:
     * sqlite3
     * libsqlite3-dev
 
-Build using the following command:
+Then build it using the following command:
 
 `g++ -Wall main.cpp serialMonitor.cpp rs232.c -o a.out -std=c++11 -lsqlite3`
 
-Run:
+Finally, run:
 
 `./a.out`
 
